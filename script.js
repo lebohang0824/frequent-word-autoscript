@@ -8,24 +8,26 @@ const file = async () => {
     let freqWordCount   = 0;
     
     // Split
-    words = words.split(/(\s+)/);
+    words = words.replace(/[.,"();*#\[\]?!@%_“$:”0-9‘]/g, '');
+    words = words.split(/[(\s+)/]/);
 
     words.forEach(word => {
-        if (word.trim() != "" && !arrWords.includes(word)) {
-            
-            arrWords.push(word);
 
-            // Filter word from the array to count it's appearance.
-            let currentWord = words.filter(selectedWord => selectedWord == word);
+        if (word.trim() == "" || arrWords.includes(word)) return;
 
-            console.log(word, " ", currentWord.length);
+        arrWords.push(word);
 
-            // Set new found word with lot of appearance.
-            if (currentWord.length > freqWordCount) {
-                freqWord = word;
-                freqWordCount = currentWord.length;
-            }
+        // Filter word from the array to count it's appearance.
+        let currentWord = words.filter(selectedWord => selectedWord == word);
+
+        console.log(word, " ", currentWord.length);
+
+        // Set new found word with lot of appearance.
+        if (currentWord.length > freqWordCount) {
+            freqWord = word;
+            freqWordCount = currentWord.length;
         }
+
     });
 
     console.log("------------------------------");
@@ -34,3 +36,7 @@ const file = async () => {
 }
 
 file();
+
+// let ww = "hi there.";
+// ww = ww.replace(/~*$/, '');
+// console.log(ww);
