@@ -1,42 +1,36 @@
 const fs = require('fs');
+const book = '2600-0.txt';
 
-const file = async () => {
-    const file          = await fs.readFileSync('2600-0.txt', 'utf8');
-    let words           = file.toLowerCase();
-    let arrWords        = [];
-    let freqWord        = ""; 
-    let freqWordCount   = 0;
-    
-    // Split
-    words = words.replace(/[.,"();*#\[\]?!@%_“$:”0-9‘]/g, '');
-    words = words.split(/[(\s+)/]/);
+fs.readFile(book, 'utf8', (err, str) => {
 
-    words.forEach(word => {
+    const words = splitString(str.toLowerCase());
 
-        if (word.trim() == "" || arrWords.includes(word)) return;
+    let wordsObj = {};
 
-        arrWords.push(word);
+    words.forEach(element => {
+        // Do not count empty spaces.
+        if (element.trim() == '') return;
 
-        // Filter word from the array to count it's appearance.
-        let currentWord = words.filter(selectedWord => selectedWord == word);
-
-        console.log(word, " ", currentWord.length);
-
-        // Set new found word with lot of appearance.
-        if (currentWord.length > freqWordCount) {
-            freqWord = word;
-            freqWordCount = currentWord.length;
+        if (wordsObj.hasOwnProperty(element)) {
+            wordsObj[element]++;
+        } else {
+            wordsObj[element] = 1;
         }
-
     });
 
-    console.log("------------------------------");
-    console.log(`The most frequent word is: "${freqWord}" appearing ${freqWordCount} times `);
+    let word, count = 0;
 
+    for (const prop in wordsObj) {
+        if (wordsObj[prop] > count) {
+            word = prop;
+            count = wordsObj[prop];
+        }
+    }
+
+    console.log(word, count);
+
+});
+
+const splitString = str => {
+    return str.split(/\s+/);
 }
-
-file();
-
-// let ww = "hi there.";
-// ww = ww.replace(/~*$/, '');
-// console.log(ww);
