@@ -3,19 +3,19 @@ const book = '2600-0.txt';
 
 fs.readFile(book, 'utf8', (err, str) => {
 
-    const words = splitString(str.toLowerCase());
-
+    // Cast string to lower case
+    str = cleanString(str);
+    
+    const words = splitString(str);
+    
     let wordsObj = {};
 
-    words.forEach(element => {
+    words.forEach(el => {
         // Do not count empty spaces.
-        if (element.trim() == '') return;
+        if (el.trim() == '') return;
 
-        if (wordsObj.hasOwnProperty(element)) {
-            wordsObj[element]++;
-        } else {
-            wordsObj[element] = 1;
-        }
+        wordsObj.hasOwnProperty(el) ? wordsObj[el]++ : wordsObj[el] = 1;
+
     });
 
     let word, count = 0;
@@ -33,4 +33,9 @@ fs.readFile(book, 'utf8', (err, str) => {
 
 const splitString = str => {
     return str.split(/\s+/);
+}
+
+const cleanString = str => {
+    const regex = /[.,"();*#\[\]?!@%_“$:”0-9‘]/g;
+    return str.toLowerCase().replace(regex, '');
 }
